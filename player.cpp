@@ -14,6 +14,10 @@ Player::Player(Side side) {
      * precalculating things, etc.) However, remember that you will only have
      * 30 seconds.
      */
+
+    /* I am adding a comment so that I can see the canges made in github and get 5
+     * free points! - Brent Cahill
+     */
 }
 
 /*
