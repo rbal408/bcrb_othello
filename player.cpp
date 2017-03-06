@@ -1,5 +1,6 @@
 #include "player.hpp"
 #include <vector>
+#include <climits>
 
 /*
  * Constructor for the player; initialize everything here. The side your AI is
@@ -58,24 +59,14 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 
     // A copy board from which to check move values for the Heuristic values.
     Board *board_copy = this_board->copy();
-
-
-    /* Theoretically, instead of having two vectors which had Moves and scores
-     * respecitively, we could create a linked list which had three values,
-     * the move, the value and a pointer to the next. This would liekly be
-     * much more efficient. I have implemented this type of list in the 
-     * player.hpp file.
-     */
     std::vector<Move*> moves;           // Vector of possible moves
-    //std::vector<int> scores; // Vector of scores for each move
     Move *our_move = new Move(-1, -1); // The move we decide to make
-    two_node_ll lst;                   // Linked list of moves and scores
 
     /* This checks for all possible moves and adds them to a vector of moves.
      * We can then check this vector to see which move we want to actually
      * make.
      */
-    while(this_board->hasMoves(*our_side)){
+    if(this_board->hasMoves(*our_side)){
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 Move *curr = new Move(i, j);
@@ -85,6 +76,8 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
                 }
             }
         }
+        int this_score;
+        int max_score = INT_MIN;
 
         /* This assignes a Heuristic score to each possible move by our_side.
          * We will iterate through all moves to determine the scores for each.
@@ -96,7 +89,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
              * move, then:
              *
              * If the square is a side: (score * 3)
-             * If the square is a corner: (score * 4)?
+             * If the square is a corner: (score * 9)?
              * If the square is one before a side/corner: (score * (-3))
              */
 
@@ -105,12 +98,42 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 
             board_copy->doMove(temp_mv, *our_side);
 
-            //lst.
+            this_score = board_copy->count(*our_side);
 
+            // Alter the score based on the placement of the move.
+
+            // X part
+            if (temp_mv->getX() == 0 || temp_mv->getX() == 7)
+            {
+                this_score *= 3;
+            }
+            else if (temp_mv->getX() == 1 || temp_mv->getX() == 6)
+            {
+                this_score *= (-3);
+            }
+
+            // Y part
+            if (temp_mv->getY() == 0 || temp_mv->getY() == 7)
+            {
+                this_score *= 3;
+            }
+            else if (temp_mv->getY() == 1 || temp_mv->getY() == 6)
+            {
+                this_score *= (-3);
+            }
+
+            if (this_score > max_score)
+            {
+                max_score = this_score;
+                our_move = temp_mv;
+            }
         }
 
         this_board->doMove(our_move, *our_side);
         moves.clear();
+    }
+    else{
+        return nullptr;
     }
 
     return nullptr;
