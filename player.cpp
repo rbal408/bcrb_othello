@@ -1,17 +1,18 @@
 #include "player.hpp"
+#include <vector>
 
 /*
  * Constructor for the player; initialize everything here. The side your AI is
  * on (BLACK or WHITE) is passed in as "side". The constructor must finish
  * within 30 seconds.
  */
-Player::Player(Side side) {
+Player::Player(Side *side) {
     // Will be set to true in test_minimax.cpp.
     testingMinimax = false;
 
-    Board this_board = new Board();
+    this->this_board = new Board();
 
-    Side our_side = side;
+    this->our_side = side;
 
 
 
@@ -21,7 +22,7 @@ Player::Player(Side side) {
      * 30 seconds.
      */
 
-    /* I am adding a comment so that I can see the canges made in github and get 5
+    /* I am adding a comment so that I can see the changes made in github and get 5
      * free points! - Brent Cahill
      */
 
@@ -56,7 +57,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
      */
 
     // A copy board from which to check move values for the Heuristic values.
-    Board board_copy = this_board.copy();
+    Board *board_copy = this_board->copy();
 
 
     /* Theoretically, instead of having two vectors which had Moves and scores
@@ -65,19 +66,20 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
      * much more efficient. I have implemented this type of list in the 
      * player.hpp file.
      */
-    std::vector<Move> moves; // Vector of possible moves
-    std::vector<int> scores; // Vector of scores for each move
-    Move our_move;           // The move we decide to make
+    std::vector<Move*> moves;           // Vector of possible moves
+    //std::vector<int> scores; // Vector of scores for each move
+    Move *our_move = new Move(-1, -1); // The move we decide to make
+    two_node_ll lst;                   // Linked list of moves and scores
 
     /* This checks for all possible moves and adds them to a vector of moves.
      * We can then check this vector to see which move we want to actually
      * make.
      */
-    while(this_board.hasMoves(our_side)){
+    while(this_board->hasMoves(*our_side)){
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                Move curr = (i, j);
-                if (checkMove(curr, our_side) == true)
+                Move *curr = new Move(i, j);
+                if (this_board->checkMove(curr, *our_side) == true)
                 {
                     moves.push_back(curr);
                 }
@@ -97,11 +99,11 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
              * If the square is a corner: (score * 4)?
              * If the square is one before a side/corner: (score * (-3))
              */
+            lst.
 
-            board_copy.doMove()
         }
 
-        this_board.doMove(our_move, our_side);
+        this_board->doMove(our_move, *our_side);
         moves.clear();
     }
 

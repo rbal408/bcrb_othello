@@ -10,7 +10,10 @@ using namespace std;
 class Player {
 
 public:
-    Player(Side side);
+    Side *our_side;
+    Board *this_board;
+
+    Player(Side *side);
     ~Player();
 
     Move *doMove(Move *opponentsMove, int msLeft);
@@ -19,11 +22,33 @@ public:
     bool testingMinimax;
 };
 
+class move_score {
+
+public:
+    Move *move = new Move(-1, -1);
+    int score;
+
+    move_score(Move *mv, int scr){
+        move->setX(mv->getX());
+        move->setY(mv->getY());
+        score = scr;
+    }
+
+    ~move_score(){}
+
+    Move getMove(){
+        return *move;
+    }
+    int getScore(){
+        return score;
+    }
+};
+
 class two_node_ll {
 
     struct Node {
-        Move move;
-        int scr;
+        Move *move = new Move(-1, -1);
+        int score;
         Node *next;
     };
 
@@ -33,25 +58,31 @@ public:
         head = NULL;
     }
 
-    void push(Move mv, int scr)
+    void push(Move *mv, int scr)
     {
         Node *n = new Node();
-        n->move = mv;
+        n->move->setX(mv->getX());
+        n->move->setY(mv->getY());
         n->score = scr;
         head = n;
     }
 
-    std::tuple<Move, int> pop();
+    move_score pop()
     {
         Node *n = head;
-        Move mv = n->move;
+        Move *mv = n->move;
         int scr = n->score;
 
         head = head->next;
         delete n;
-        std::tuple<Move, int> val = make_tuple(mv, scr);
-        return val;
+        return move_score(mv, scr);
     }
-}
+
+private:
+    Node *head;
+};
+
+
+
 
 #endif
