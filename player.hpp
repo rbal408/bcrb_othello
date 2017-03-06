@@ -13,7 +13,7 @@ public:
     Side *our_side;
     Board *this_board;
 
-    Player(Side *side);
+    Player(Side side);
     ~Player();
 
     Move *doMove(Move *opponentsMove, int msLeft);

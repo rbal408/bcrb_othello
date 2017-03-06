@@ -6,13 +6,13 @@
  * on (BLACK or WHITE) is passed in as "side". The constructor must finish
  * within 30 seconds.
  */
-Player::Player(Side *side) {
+Player::Player(Side side) {
     // Will be set to true in test_minimax.cpp.
     testingMinimax = false;
 
     this->this_board = new Board();
 
-    this->our_side = side;
+    this->our_side = &side;
 
 
 
@@ -99,7 +99,13 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
              * If the square is a corner: (score * 4)?
              * If the square is one before a side/corner: (score * (-3))
              */
-            lst.
+
+            Move *temp_mv = moves.back();
+            moves.pop_back();
+
+            board_copy->doMove(temp_mv, *our_side);
+
+            //lst.
 
         }
 
