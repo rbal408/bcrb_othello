@@ -18,6 +18,10 @@ Player::Player(Side side) {
     /* I am adding a comment so that I can see the canges made in github and get 5
      * free points! - Brent Cahill
      */
+
+    /* I am also adding a comment so that I can see the changes made in github and get 5
+     * free points! - Roshan Bal
+     */
 }
 
 /*
