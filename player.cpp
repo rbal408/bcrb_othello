@@ -58,15 +58,10 @@ Player::~Player() {
  * return nullptr.
  */
 Move *Player::doMove(Move *opponentsMove, int msLeft) {
-    // Create a copy board, a vector of moves, and initialize our move.
+    // Execute the other player's move on our local board.
     this_board->doMove(opponentsMove, their_side);
-    if (opponentsMove == nullptr)
-    {
-        std::cerr << "opponent: PASS" << endl;
-    }
-    else{
-        std::cerr << "opponent: (" << opponentsMove->x << ", " << opponentsMove->y << ")" << endl;
-    }
+
+    // Create a copy board, a vector of moves, and initialize our move.
     Board *board_copy = this_board->copy();
     std::vector<Move*> moves;
     Move *our_move = nullptr;
@@ -81,7 +76,6 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
             if (this_board->checkMove(curr, our_side) == true)
             {
                 moves.push_back(curr);
-                std::cerr << "pushed back: (" << curr->getX() << ", " << curr->getY() << ")" << endl;
             }
         }
     }
@@ -92,24 +86,29 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
         return nullptr;
     }
 
-    // Initializes our move to a value, and this_min_score
+    // Initializes our move to the last element of the moves vector.
     our_move = moves.back();
-    int this_min_score;
 
-    /* Creates a vector of minimum scores from which we will choose our
-     * move.
+    /* Initializes a variable for the minimum score to be used in the
+     * loop below. Also creates a vector of minimum scores from which
+     * we will choose our move.
      */
+    int this_min_score;
     std::vector<int> min_scores;
-
-    /* Executes each move on a board copy and determines the minimax
-     * valuation for each one.
+    /* Executes each possible move on a board copy and determines the
+     * minimax valuation for each one.
      */
     for (int i = 0; i < moves.size(); i++){
+        // Execute the move on our board copy
         board_copy->doMove(moves[i], our_side);
+
+        // Get the minimax valuation.
         this_min_score = this->minimax_decision(*board_copy, their_side);
 
         // Add the minimum score to the vector.
         min_scores.push_back(this_min_score);
+
+        // Reset our board copy.
         board_copy = this_board->copy();
     }
 
@@ -127,11 +126,10 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
         }
     }
 
-    // Sets our move equal to the move with the max min.
+    // Sets our move equal to the move with the maximum min.
     our_move = moves[max_index];
     
     // Executes our move on the local board, then returns it
-    std::cerr << "executed: (" << our_move->getX() << ", " << our_move->getY() << ")" << endl;
     this_board->doMove(our_move, our_side);
     return our_move;
 }
@@ -140,67 +138,6 @@ int Player::Heuristic_calc(Board curr, Move move, Side side){
     Board *board_copy = curr.copy();
     board_copy->doMove(&move, side);
     int this_score = (board_copy->count(our_side)) - (board_copy->count(their_side));
-
-    // X part
-    /*if (testingMinimax == false)
-    {
-        if (move.getX() == 0 || move.getX() == 7)
-        {
-            this_score += 5;
-        }
-        if (move.getX() == 1 && move.getY() == 1)
-        {
-            this_score -= 20;
-        }
-        if (move.getX() == 6 && move.getY() == 6)
-        {
-            this_score -= 20;
-        }
-        if (move.getX() == 1 && move.getY() == 6)
-        {
-            this_score -= 20;
-        }
-        if (move.getX() == 6 && move.getY() == 1)
-        {
-            this_score -= 20;
-        }
-        if (move.getX() == 1 && move.getY() == 0)
-        {
-            this_score -= 15;
-        }
-        if (move.getX() == 0 && move.getY() == 1)
-        {
-            this_score -= 15;
-        }
-        if (move.getX() == 6 && move.getY() == 0)
-        {
-            this_score -= 15;
-        }
-        if (move.getX() == 7 && move.getY() == 1)
-        {
-            this_score -= 15;
-        }
-        if (move.getX() == 0 && move.getY() == 6)
-        {
-            this_score -= 15;
-        }
-        if (move.getX() == 1 && move.getY() == 7)
-        {
-            this_score -= 15;
-        }
-        if (move.getX() == 6 && move.getY() == 7)
-        {
-            this_score -= 15;
-        }
-        if (move.getX() == 7 && move.getY() == 6)
-        {
-            this_score -= 15;
-        }
-        if (move.getY() == 0 || move.getY() == 7)
-        {
-            this_score += 5;
-        }
-    }*/
     return this_score;
 }
 
@@ -224,7 +161,7 @@ int Player::minimax_decision(Board after_move, Side side){
 
     if (their_moves.size() == 0)
     {
-        return 1000000;
+        return 1000;
     }
 
     for (int i = 0; i < their_moves.size(); i++)
