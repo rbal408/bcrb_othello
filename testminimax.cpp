@@ -27,13 +27,10 @@ int main(int argc, char *argv[]) {
     player->testingMinimax = true;
 
 
-    /**
-     * TODO: Write code to set your player's internal board state to the
-     * example state.
-     */
+    player->this_board = board;
 
     // Get player's move and check if it's right.
-    Move *move = player->doMove(nullptr, 0);
+    Move *move = player->doMove(nullptr, -1);
 
     if (move != nullptr && move->x == 1 && move->y == 1) {
         std::cout << "Correct move: (1, 1)" << std::endl;;

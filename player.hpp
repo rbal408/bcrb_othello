@@ -10,79 +10,20 @@ using namespace std;
 class Player {
 
 public:
-    Side *our_side;
+    Side our_side;
+    Side their_side;
     Board *this_board;
 
     Player(Side side);
     ~Player();
 
     Move *doMove(Move *opponentsMove, int msLeft);
+    int Heuristic_calc(Board curr, Move move, Side side);
+    void adjust_score(Board curr, Move move, Side side, int &this_score);
+    int minimax_decision(Board after_move, Side side);
 
     // Flag to tell if the player is running within the test_minimax context
     bool testingMinimax;
 };
-
-class move_score {
-
-public:
-    Move *move = new Move(-1, -1);
-    int score;
-
-    move_score(Move *mv, int scr){
-        move->setX(mv->getX());
-        move->setY(mv->getY());
-        score = scr;
-    }
-
-    ~move_score(){}
-
-    Move getMove(){
-        return *move;
-    }
-    int getScore(){
-        return score;
-    }
-};
-
-class two_node_ll {
-
-    struct Node {
-        Move *move = new Move(-1, -1);
-        int score;
-        Node *next;
-    };
-
-public:
-
-    two_node_ll(){
-        head = NULL;
-    }
-
-    void push(Move *mv, int scr)
-    {
-        Node *n = new Node();
-        n->move->setX(mv->getX());
-        n->move->setY(mv->getY());
-        n->score = scr;
-        head = n;
-    }
-
-    move_score pop()
-    {
-        Node *n = head;
-        Move *mv = n->move;
-        int scr = n->score;
-
-        head = head->next;
-        delete n;
-        return move_score(mv, scr);
-    }
-
-private:
-    Node *head;
-};
-
-
-
 
 #endif
