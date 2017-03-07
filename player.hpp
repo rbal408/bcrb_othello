@@ -19,7 +19,6 @@ public:
 
     Move *doMove(Move *opponentsMove, int msLeft);
     int Heuristic_calc(Board curr, Move move, Side side);
-    void adjust_score(Board curr, Move move, Side side, int &this_score);
     int minimax_decision(Board after_move, Side side);
 
     // Flag to tell if the player is running within the test_minimax context
