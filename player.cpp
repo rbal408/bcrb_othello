@@ -1,6 +1,7 @@
 #include "player.hpp"
 #include <vector>
 #include <climits>
+#define BOARDSIZE 8
 
 /*
  * Constructor for the player; initialize everything here. The side your AI is
@@ -70,8 +71,8 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
      * We can then check this vector to see which move we want to actually
      * make.
      */
-    for (int i = 0; i < 8; i++) {
-        for (int j = 0; j < 8; j++) {
+    for (int i = 0; i < BOARDSIZE; i++) {
+        for (int j = 0; j < BOARDSIZE; j++) {
             Move *curr = new Move(i, j);
             if (this_board->checkMove(curr, our_side) == true)
             {
@@ -149,8 +150,8 @@ int Player::minimax_decision(Board after_move, Side side){
     Board *two_ply = after_move.copy();
 
     // Creates a vector of all of their possible moves
-    for (int i = 0; i < 8; i++) {
-        for (int j = 0; j < 8; j++) {
+    for (int i = 0; i < BOARDSIZE; i++) {
+        for (int j = 0; j < BOARDSIZE; j++) {
             Move *curr = new Move(i, j);
             if (after_move.checkMove(curr, side) == true)
             {
