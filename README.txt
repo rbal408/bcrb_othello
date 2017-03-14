@@ -12,3 +12,4 @@ used to achieve these calculations. After playing with the numbers for a little 
 in the performances of our Heuristic and our minimax, so we resorted to maintaining the same regular Heuristic function. We also spent some time attempting to implement
 alpha-beta pruning, but couldn't get it to compile in time to submit the assignment.
 In addition, we added a couple of comments to our code to make it more readable.
+All in all, our code should be respectable, but we are not expecting to win games in the tournament by any means.
