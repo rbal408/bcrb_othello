@@ -62,7 +62,12 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     // Execute the other player's move on our local board.
     this_board->doMove(opponentsMove, their_side);
 
+<<<<<<< HEAD
+    // A copy board from which to check move values for the Heuristic values.
+    std::cout << "beginning of do move function" << std::endl;
+=======
     // Create a copy board, a vector of moves, and initialize our move.
+>>>>>>> bb1161bd7294f392e5568a353fe284813865b634
     Board *board_copy = this_board->copy();
     std::vector<Move*> moves;
     Move *our_move = nullptr;
@@ -71,10 +76,58 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
      * We can then check this vector to see which move we want to actually
      * make.
      */
+<<<<<<< HEAD
     for (int i = 0; i < BOARDSIZE; i++) {
         for (int j = 0; j < BOARDSIZE; j++) {
+=======
+<<<<<<< HEAD
+    if(this_board->hasMoves(*our_side)){
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                Move *curr = new Move(i, j);
+                if (this_board->checkMove(curr, *our_side) == true)
+                {
+                    moves.push_back(curr);
+                }
+            }
+        }
+        int this_score;
+        int max_score = INT_MIN;
+
+        /* This assignes a Heuristic score to each possible move by our_side.
+         * We will iterate through all moves to determine the scores for each.
+         */
+        for (int i = 0; i < moves.size(); i++){
+            /* TODO
+             * Ideas:
+             * Assign a _score_ based on the number of stones captured by the
+             * move, then:
+             *
+             * If the square is a side: (score * 3)
+             * If the square is a corner: (score * 9)?
+             * If the square is one before a side/corner: (score * (-3))
+             */
+
+            std::cout << "Got to for loop" << std::endl;
+            std::cout << max_score << std::endl;
+            Move *temp_mv = moves.back();
+            moves.pop_back();
+
+            board_copy->doMove(temp_mv, *our_side);
+
+            this_score = board_copy->count(*our_side);
+
+            // Alter the score based on the placement of the move.
+
+            // X part
+            if (temp_mv->getX() == 0 || temp_mv->getX() == 7)
+=======
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+>>>>>>> 899e671d08f07707ecbc9915a0797198dfeed7e1
             Move *curr = new Move(i, j);
             if (this_board->checkMove(curr, our_side) == true)
+>>>>>>> bb1161bd7294f392e5568a353fe284813865b634
             {
                 moves.push_back(curr);
             }
