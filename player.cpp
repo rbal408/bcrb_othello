@@ -58,6 +58,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
      */
 
     // A copy board from which to check move values for the Heuristic values.
+    std::cout << "beginning of do move function" << std::endl;
     Board *board_copy = this_board->copy();
     std::vector<Move*> moves;           // Vector of possible moves
     Move *our_move = new Move(-1, -1); // The move we decide to make
@@ -93,6 +94,8 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
              * If the square is one before a side/corner: (score * (-3))
              */
 
+            std::cout << "Got to for loop" << std::endl;
+            std::cout << max_score << std::endl;
             Move *temp_mv = moves.back();
             moves.pop_back();
 
