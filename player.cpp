@@ -62,8 +62,6 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     // Execute the other player's move on our local board.
     this_board->doMove(opponentsMove, their_side);
 
-    // A copy board from which to check move values for the Heuristic values.
-    std::cout << "beginning of do move function" << std::endl;
     // Create a copy board, a vector of moves, and initialize our move.
     Board *board_copy = this_board->copy();
     std::vector<Move*> moves;
@@ -75,48 +73,6 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
      */
     for (int i = 0; i < BOARDSIZE; i++) {
         for (int j = 0; j < BOARDSIZE; j++) {
-    if(this_board->hasMoves(*our_side)){
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                Move *curr = new Move(i, j);
-                if (this_board->checkMove(curr, *our_side) == true)
-                {
-                    moves.push_back(curr);
-                }
-            }
-        }
-        int this_score;
-        int max_score = INT_MIN;
-
-        /* This assignes a Heuristic score to each possible move by our_side.
-         * We will iterate through all moves to determine the scores for each.
-         */
-        for (int i = 0; i < moves.size(); i++){
-            /* TODO
-             * Ideas:
-             * Assign a _score_ based on the number of stones captured by the
-             * move, then:
-             *
-             * If the square is a side: (score * 3)
-             * If the square is a corner: (score * 9)?
-             * If the square is one before a side/corner: (score * (-3))
-             */
-
-            std::cout << "Got to for loop" << std::endl;
-            std::cout << max_score << std::endl;
-            Move *temp_mv = moves.back();
-            moves.pop_back();
-
-            board_copy->doMove(temp_mv, *our_side);
-
-            this_score = board_copy->count(*our_side);
-
-            // Alter the score based on the placement of the move.
-
-            // X part
-            if (temp_mv->getX() == 0 || temp_mv->getX() == 7)
-    for (int i = 0; i < 8; i++) {
-        for (int j = 0; j < 8; j++) {
             Move *curr = new Move(i, j);
             if (this_board->checkMove(curr, our_side) == true)
             {
@@ -179,21 +135,36 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     return our_move;
 }
 
+/* This function takes a board after a potential move and the side for which
+ * the move was made. It then returns the absolute minimum possible Heuristic
+ * score that could occur for that sideif that move is made.
+ */
 int Player::Heuristic_calc(Board curr, Move move, Side side){
+    // Creates a copy board for us to make the move on
     Board *board_copy = curr.copy();
+
+    // Executes the move on the copy board.
     board_copy->doMove(&move, side);
-    int this_score = (board_copy->count(our_side)) - (board_copy->count(their_side));
+
+    /* Calculates and returns the score using the difference between the
+     * stones of the side passed and the stones of the opponent.
+     */
+    int this_score = (board_copy->count(our_side)) -
+    (board_copy->count(their_side));
     return this_score;
 }
 
-
+/* This function takes a board after a potential move and the side for which
+ * the move was made. It then returns the absolute minimum possible Heuristic
+ * score that could occur for that sideif that move is made.
+ */
 int Player::minimax_decision(Board after_move, Side side){
     int this_score;
     int min_score = 1000;
     std::vector<Move*> their_moves;
     Board *two_ply = after_move.copy();
 
-    // Creates a vector of all of their possible moves
+    // Adds all of the opponent's possible moves to the vector.
     for (int i = 0; i < BOARDSIZE; i++) {
         for (int j = 0; j < BOARDSIZE; j++) {
             Move *curr = new Move(i, j);
@@ -204,11 +175,9 @@ int Player::minimax_decision(Board after_move, Side side){
         }
     }
 
-    if (their_moves.size() == 0)
-    {
-        return 1000;
-    }
-
+    /* Calculates and returns the absolute minimum score after the opponent's
+     * move.
+     */
     for (int i = 0; i < their_moves.size(); i++)
     {
         this_score = Heuristic_calc(*two_ply, *their_moves[i], their_side);
